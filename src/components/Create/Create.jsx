@@ -3,6 +3,8 @@ import "./Create.css";
 import Header from "../Header/Header";
 import { FirebaseContext } from "../../store/FirebaseContext";
 import { addDoc, collection, Timestamp } from "firebase/firestore";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Create = () => {
   const [name, setName] = useState("");
@@ -30,13 +32,14 @@ const Create = () => {
       return data.secure_url;
     } catch (error) {
       console.error(error);
+      throw error;
     }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!image || !name || !category || !price) {
-      alert("all fields are required");
+      toast.error("All fields are required");
       return;
     }
 
@@ -46,28 +49,28 @@ const Create = () => {
       const imageUrl = await uploadImageToCloudinary(image);
 
       if (!imageUrl) {
-        alert("image upload failed");
-        setLoading(false);
+        toast.error("Image upload failed");
         return;
       }
+
       const productData = {
         name,
         category,
         price,
         imageUrl,
-        userId: user?.uid || "guest",
+        userId: user?.uid || "Guest",
         createdAt: Timestamp.now(),
       };
 
       await addDoc(collection(db, "products"), productData);
-      alert("product uploaded successfully");
+      toast.success("Product uploaded successfully");
       setName("");
       setCategory("");
       setPrice("");
       setImage(null);
     } catch (error) {
-      console.log(error);
-      alert("product upload failed");
+      console.error(error);
+      toast.error("Product upload failed");
     } finally {
       setLoading(false);
     }
@@ -76,65 +79,81 @@ const Create = () => {
   return (
     <>
       <Header />
-      <div className="centerDiv">
-        <form onSubmit={handleSubmit}>
-          <label htmlFor="name">Name</label>
-          <br />
-          <input
-            className="input"
-            type="text"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            id="name"
-            name="Name"
-          />
-          <br />
-          <label htmlFor="category">Category</label>
-          <br />
-          <input
-            className="input"
-            type="text"
-            value={category}
-            onChange={(e) => setCategory(e.target.value)}
-            id="category"
-            name="Category"
-          />
-          <br />
-          <label htmlFor="price">Price</label>
-          <br />
-          <input
-            className="input"
-            type="number"
-            value={price}
-            onChange={(e) => setPrice(e.target.value)}
-            id="price"
-            name="Price"
-          />
-          <br />
-          <br />
-          <label htmlFor="image">Product Image</label>
-          <br />
-          <input
-            type="file"
-            onChange={(e) => setImage(e.target.files[0])}
-            id="image"
-          />
-          <br />
-          <br />
-          {image && (
-            <img
-              alt="Preview"
-              width="200px"
-              height="200px"
-              src={URL.createObjectURL(image)}
-            />
-          )}
-          <br />
-          <button type="submit" className="uploadBtn" disabled={loading}>
-            {loading ? "Uploading..." : "Upload and Submit"}
-          </button>
-        </form>
+      <div className="createContainer">
+        <div className="formWrapper">
+          <h2 className="formTitle">POST YOUR AD</h2>
+          <form onSubmit={handleSubmit}>
+            <div className="formGroup">
+              <label htmlFor="name">Item name*</label>
+              <input
+                className="input"
+                type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                id="name"
+                name="Name"
+                placeholder="Enter item name"
+              />
+            </div>
+
+            <div className="formGroup">
+              <label htmlFor="category">Category*</label>
+              <input
+                className="input"
+                type="text"
+                value={category}
+                onChange={(e) => setCategory(e.target.value)}
+                id="category"
+                name="Category"
+                placeholder="Enter category"
+              />
+            </div>
+
+            <div className="formGroup">
+              <label htmlFor="price">Price*</label>
+              <div className="priceInput">
+                <span className="currencySymbol">₹</span>
+                <input
+                  className="input"
+                  type="number"
+                  value={price}
+                  onChange={(e) => setPrice(e.target.value)}
+                  id="price"
+                  name="Price"
+                  placeholder="Enter price"
+                />
+              </div>
+            </div>
+
+            <div className="formGroup">
+              <label htmlFor="image">Upload Image*</label>
+              <div className="fileInputWrapper">
+                <input
+                  type="file"
+                  onChange={(e) => setImage(e.target.files[0])}
+                  id="image"
+                  accept="image/*"
+                  className="fileInput"
+                />
+              </div>
+              {image && (
+                <div className="imagePreview">
+                  <img alt="Preview" src={URL.createObjectURL(image)} />
+                </div>
+              )}
+            </div>
+
+            <button type="submit" className="submitButton" disabled={loading}>
+              {loading ? (
+                <span className="loadingText">Please wait...</span>
+              ) : (
+                <span>Post now</span>
+              )}
+            </button>
+          </form>
+        </div>
       </div>
+      <ToastContainer position="bottom-center" />
     </>
   );
 };
