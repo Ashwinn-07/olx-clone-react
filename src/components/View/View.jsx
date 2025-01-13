@@ -53,14 +53,14 @@ function View() {
           </div>
 
           <div className="sellerCard">
-            <div className="sellerInfo">
+            {/* <div className="sellerInfo">
               <div className="sellerAvatar">
                 <div className="avatarCircle">
                   {product.userId[0].toUpperCase()}
                 </div>
               </div>
               <h3 className="sellerName">{product.userId}</h3>
-            </div>
+            </div> */}
             <button className="chatButton">Chat with seller</button>
           </div>
 
