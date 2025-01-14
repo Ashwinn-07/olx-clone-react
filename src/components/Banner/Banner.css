@@ -7,19 +7,40 @@
   padding: 10px 16px 10px 16px;
 }
 
-.bannerParentDiv .bannerChildDiv .menuBar .categoryMenu span {
-  margin-right: 16px;
-  font-weight: bolder;
+.bannerParentDiv .bannerChildDiv .menuBar .categoryMenu {
+  display: flex;
+  align-items: center;
 }
 
-.bannerParentDiv .bannerChildDiv .menuBar .otherQuickOptions span {
+.bannerParentDiv .bannerChildDiv .menuBar .categoryMenu .category-link {
+  margin-right: 16px;
+  font-weight: bolder;
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+}
+
+.bannerParentDiv .bannerChildDiv .menuBar .otherQuickOptions {
+  display: flex;
+  gap: 10px;
+}
+
+.bannerParentDiv .bannerChildDiv .menuBar .otherQuickOptions .category-link {
   padding: 10px;
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+}
+
+.category-link:hover {
+  opacity: 0.8;
 }
 
 .bannerChildDiv .banner {
   position: relative;
   width: 100vw;
 }
+
 .bannerChildDiv .banner img {
   width: 100vw;
 }
