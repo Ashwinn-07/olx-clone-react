@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap");
+
 * * {
   margin: 0px;
   padding: 0px;
@@ -12,4 +14,7 @@
 .alignItemSpaceBetween {
   justify-content: space-between;
   align-items: center;
+}
+body {
+  font-family: "Inter", "Helvetica Neue", Arial, sans-serif;
 }
